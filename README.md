@@ -15,7 +15,7 @@ Runar is a zero-config CLI tool that tracks your script executions. Wrap and com
 ## Installation
 
 ```bash
-# or from source
+# from source
 go install github.com/dmitryglhf/runar@latest
 ```
 
