@@ -77,3 +77,8 @@ $ runar
 - **Zero dependencies** in your project
 - **Zero config** — just prefix with `runar`
 - Works with **any runner**: python, uv, conda, bash
+
+## Roadmap
+
+- Python-SDK
+- Interactive TUI
