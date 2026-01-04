@@ -9,7 +9,7 @@ import (
 
 var rootCmd = &cobra.Command{
 	Use:   "runar",
-	Short: "Runar is a command-line tool for training machine learning models",
+	Short: "Runar is a command-line tool that persistently tracks script executions",
 }
 
 func Execute() {
