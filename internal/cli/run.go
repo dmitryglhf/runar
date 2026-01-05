@@ -5,6 +5,7 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"time"
 
 	"github.com/dmitryglhf/runar/internal/git"
 	"github.com/dmitryglhf/runar/internal/runner"
@@ -20,6 +21,7 @@ var runCmd = &cobra.Command{
 }
 
 func runRun(cmd *cobra.Command, args []string) error {
+	startTime := time.Now()
 	id := storage.GenerateRunID()
 
 	gitInfo := git.GetInfo()
@@ -75,7 +77,8 @@ func runRun(cmd *cobra.Command, args []string) error {
 		return err
 	}
 
-	fmt.Printf("▶ %s\n", id)
+	fmt.Printf("[runar] ▶ %s\n", id)
+	fmt.Println("─────────────────────────────────────────")
 
 	// Run command
 	result, err := runner.Run(args, logFile)
@@ -88,10 +91,12 @@ func runRun(cmd *cobra.Command, args []string) error {
 		return err
 	}
 
+	duration := time.Since(startTime)
+	fmt.Println("─────────────────────────────────────────")
 	if result.ExitCode == 0 {
-		fmt.Printf("✓ Done (exit 0)\n")
+		fmt.Printf("[runar] ✓ Done (exit 0) | %s\n", formatElapsed(duration))
 	} else {
-		fmt.Printf("✗ Failed (exit %d)\n", result.ExitCode)
+		fmt.Printf("[runar] ✗ Failed (exit %d) | %s\n", result.ExitCode, formatElapsed(duration))
 	}
 
 	return nil
