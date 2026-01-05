@@ -4,10 +4,13 @@ import (
 	"fmt"
 	"os"
 	"text/tabwriter"
+	"time"
 
 	"github.com/dmitryglhf/runar/internal/storage"
 	"github.com/spf13/cobra"
 )
+
+var listLimit int
 
 var listCmd = &cobra.Command{
 	Use:     "ls",
@@ -24,7 +27,7 @@ var listCmd = &cobra.Command{
 			return err
 		}
 
-		runs, err := store.ListRuns()
+		runs, err := store.ListRuns(listLimit)
 		if err != nil {
 			return err
 		}
@@ -35,13 +38,14 @@ var listCmd = &cobra.Command{
 		}
 
 		w := tabwriter.NewWriter(os.Stdout, 0, 0, 2, ' ', 0)
-		fmt.Fprintln(w, "ID\tSTATUS\tCOMMAND\tDURATION")
+		fmt.Fprintln(w, "ID\tSTATUS\tCOMMAND\tDURATION\tCREATED")
 		for _, r := range runs {
-			fmt.Fprintf(w, "%s\t%s\t%s\t%s\n",
+			fmt.Fprintf(w, "%s\t%s\t%s\t%s\t%s\n",
 				r.ID,
 				r.Status,
 				truncate(r.Command, 30),
 				formatDuration(r.CreatedAt, r.FinishedAt),
+				r.CreatedAt.Format(time.RFC3339),
 			)
 		}
 		w.Flush()
@@ -50,5 +54,6 @@ var listCmd = &cobra.Command{
 }
 
 func init() {
+	listCmd.Flags().IntVarP(&listLimit, "limit", "l", 0, "Limit number of runs (0 = no limit)")
 	rootCmd.AddCommand(listCmd)
 }

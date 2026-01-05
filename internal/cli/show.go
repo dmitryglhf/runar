@@ -2,6 +2,7 @@ package cli
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/dmitryglhf/runar/internal/storage"
 	"github.com/spf13/cobra"
@@ -35,6 +36,7 @@ func runShow(cmd *cobra.Command, args []string) error {
 	fmt.Printf("ID:       %s\n", run.ID)
 	fmt.Printf("Command:  %s\n", run.Command)
 	fmt.Printf("Status:   %s\n", run.Status)
+	fmt.Printf("Started:  %s\n", run.CreatedAt.Format(time.RFC3339))
 	fmt.Printf("Duration: %s\n", formatDuration(run.CreatedAt, run.FinishedAt))
 
 	if run.GitBranch != nil && run.GitCommit != nil {

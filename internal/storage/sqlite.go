@@ -61,12 +61,16 @@ func createSchema(db *sql.DB) error {
 	return err
 }
 
-func (s *Storage) ListRuns() ([]Run, error) {
-	rows, err := s.db.Query(`
+func (s *Storage) ListRuns(limit int) ([]Run, error) {
+	query := `
 		SELECT id, name, command, status, exit_code, git_commit, git_branch, git_dirty, workdir, stdout_path, created_at, finished_at
 		FROM runs
 		ORDER BY created_at DESC
-	`)
+	`
+	if limit > 0 {
+		query += fmt.Sprintf(" LIMIT %d", limit)
+	}
+	rows, err := s.db.Query(query)
 	if err != nil {
 		return nil, err
 	}
