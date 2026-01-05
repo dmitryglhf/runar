@@ -45,8 +45,7 @@ runar <command>        # run and track
 runar                  # TUI dashboard
 runar ls               # list experiments
 runar rm <id>          # delete experiment
-runar show <id>        # show details
-runar logs <id>        # show stdout/stderr
+runar logs <id>        # show stdout/stderr (WIP)
 ```
 
 ## TUI Dashboard
