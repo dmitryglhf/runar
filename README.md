@@ -4,13 +4,13 @@
 
 # `runar`
 
-### Zero-config scripts tracking
+### Zero-config script tracking
 
 </div>
 
 ## Overview
 
-Runar is a zero-config CLI tool that tracks your script executions. Wrap and command with `runar` to automatically log runtime, exit status, git state, and stdout with persistent storage.
+Runar is a zero-config CLI tool that tracks your script executions. Wrap any command with `runar` to automatically log runtime, exit status, git state, and stdout with persistent storage.
 
 ## Installation
 
@@ -21,7 +21,7 @@ go install github.com/dmitryglhf/runar@latest
 
 ## Usage
 
-Wrap any command and `runar` tracks the rest:
+Wrap any command with `runar`:
 
 ```bash
 runar python train.py --epochs 10
@@ -42,21 +42,17 @@ runar ./scripts/experiment.sh
 
 ```bash
 runar <command>        # run and track
-runar                  # TUI dashboard
-runar ls               # list experiments
-runar rm <id>          # delete experiment
-runar show <id>        # get details
+runar ls               # list runs
+runar rm <id>          # delete run
+runar show <id>        # show details
 runar logs <id>        # show stdout/stderr
+runar                  # TUI dashboard
 ```
 
 ## TUI Dashboard
 
-```bash
-$ runar
 ```
-
-```
-┌─ Experiments ────────────────────────────────── runar v0.1 ─┐
+┌─ Runs ───────────────────────────────────────── runar v0.1 ─┐
 │                                                             │
 ├─────┬──────────────────┬────────┬──────────────┬────────────┤
 │  #  │ Name             │ Status │ Command      │ Duration   │

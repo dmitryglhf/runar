@@ -75,7 +75,7 @@ func runRun(cmd *cobra.Command, args []string) error {
 		return err
 	}
 
-	fmt.Printf("Run ID: %s\n", id)
+	fmt.Printf("▶ %s\n", id)
 
 	// Run command
 	result, err := runner.Run(args, logFile)
@@ -89,9 +89,9 @@ func runRun(cmd *cobra.Command, args []string) error {
 	}
 
 	if result.ExitCode == 0 {
-		fmt.Printf("Done (exit 0)\n")
+		fmt.Printf("✓ Done (exit 0)\n")
 	} else {
-		fmt.Printf("Failed (exit %d)\n", result.ExitCode)
+		fmt.Printf("✗ Failed (exit %d)\n", result.ExitCode)
 	}
 
 	return nil

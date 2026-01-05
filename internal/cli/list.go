@@ -12,7 +12,7 @@ import (
 var listCmd = &cobra.Command{
 	Use:     "ls",
 	Aliases: []string{"list"},
-	Short:   "List all experiments",
+	Short:   "List all runs",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		dbPath, err := storage.DefaultDBPath()
 		if err != nil {
@@ -30,7 +30,7 @@ var listCmd = &cobra.Command{
 		}
 
 		if len(runs) == 0 {
-			fmt.Println("No experiments found")
+			fmt.Println("No runs found")
 			return nil
 		}
 

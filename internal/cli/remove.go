@@ -12,7 +12,7 @@ var forceDelete bool
 var removeCmd = &cobra.Command{
 	Use:     "rm <id>",
 	Aliases: []string{"delete", "remove"},
-	Short:   "Delete an experiment",
+	Short:   "Delete a run",
 	Args:    cobra.ExactArgs(1),
 	RunE:    runRemove,
 }
