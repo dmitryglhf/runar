@@ -77,3 +77,4 @@ runar                  # TUI dashboard
 - Add more commands
 - Interactive TUI
 - Python-SDK
+- `brew` installation or other pkg manager
