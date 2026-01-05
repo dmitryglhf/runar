@@ -38,17 +38,15 @@ runar ./scripts/experiment.sh
 - Git commit, branch, dirty state
 - Working directory
 
-**No SDK. No config. No dependencies in your project.**
-
 ## Commands
 
 ```bash
 runar <command>        # run and track
 runar                  # TUI dashboard
 runar ls               # list experiments
+runar rm <id>          # delete experiment
 runar show <id>        # show details
 runar logs <id>        # show stdout/stderr
-runar rm <id>          # delete experiment
 ```
 
 ## TUI Dashboard
