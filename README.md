@@ -45,7 +45,8 @@ runar <command>        # run and track
 runar                  # TUI dashboard
 runar ls               # list experiments
 runar rm <id>          # delete experiment
-runar logs <id>        # show stdout/stderr (WIP)
+runar show <id>        # get details
+runar logs <id>        # show stdout/stderr
 ```
 
 ## TUI Dashboard
@@ -77,5 +78,6 @@ $ runar
 
 ## Roadmap
 
-- Python-SDK
+- Add more commands
 - Interactive TUI
+- Python-SDK
