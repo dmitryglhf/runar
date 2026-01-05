@@ -13,6 +13,8 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var runName string
+
 var runCmd = &cobra.Command{
 	Use:   "run <command>",
 	Short: "Run and track a command",
@@ -65,6 +67,10 @@ func runRun(cmd *cobra.Command, args []string) error {
 		StdoutPath: &logPath,
 	}
 
+	if runName != "" {
+		run.Name = &runName
+	}
+
 	// Add git info if available
 	if gitInfo != nil {
 		run.GitCommit = &gitInfo.Commit
@@ -77,7 +83,11 @@ func runRun(cmd *cobra.Command, args []string) error {
 		return err
 	}
 
-	fmt.Printf("[runar] ▶ %s\n", id)
+	if runName != "" {
+		fmt.Printf("[runar] ▶ %s (%s)\n", id, runName)
+	} else {
+		fmt.Printf("[runar] ▶ %s\n", id)
+	}
 	fmt.Println("─────────────────────────────────────────")
 
 	// Run command
@@ -103,5 +113,6 @@ func runRun(cmd *cobra.Command, args []string) error {
 }
 
 func init() {
+	runCmd.Flags().StringVarP(&runName, "name", "n", "", "Name for this run")
 	rootCmd.AddCommand(runCmd)
 }
