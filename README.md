@@ -74,7 +74,7 @@ runar                  # TUI dashboard
 
 ## Roadmap
 
-- Add more commands
 - Interactive TUI
+- Scripts orchestration
 - Python-SDK
-- `brew` installation or other pkg manager
+- Package manager installation
