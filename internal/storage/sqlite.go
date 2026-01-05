@@ -61,21 +61,10 @@ func createSchema(db *sql.DB) error {
 	return err
 }
 
-func (s *Storage) ListRuns(limit int) ([]Run, error) {
-	query := `
-		SELECT id, name, command, status, exit_code, git_commit, git_branch, git_dirty, workdir, stdout_path, created_at, finished_at
-		FROM runs
-		ORDER BY created_at DESC
-	`
-	if limit > 0 {
-		query += fmt.Sprintf(" LIMIT %d", limit)
-	}
-	rows, err := s.db.Query(query)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
+// --- Helper functions ---
 
+func scanRuns(rows *sql.Rows) ([]Run, error) {
+	defer rows.Close()
 	var runs []Run
 	for rows.Next() {
 		var r Run
@@ -98,12 +87,26 @@ func (s *Storage) ListRuns(limit int) ([]Run, error) {
 		}
 		runs = append(runs, r)
 	}
+	return runs, rows.Err()
+}
 
-	if err := rows.Err(); err != nil {
+// --- CRUD ---
+
+func (s *Storage) ListRuns(limit int) ([]Run, error) {
+	query := `
+		SELECT id, name, command, status, exit_code, git_commit, git_branch, git_dirty, workdir, stdout_path, created_at, finished_at
+		FROM runs
+		ORDER BY created_at DESC
+	`
+	if limit > 0 {
+		query += fmt.Sprintf(" LIMIT %d", limit)
+	}
+	rows, err := s.db.Query(query)
+	if err != nil {
 		return nil, err
 	}
 
-	return runs, nil
+	return scanRuns(rows)
 }
 
 func (s *Storage) DeleteRun(id string) error {
@@ -178,6 +181,38 @@ func (s *Storage) UpdateRunFinished(id string, exitCode int) error {
 	`, statusFromExitCode(exitCode), exitCode, id)
 	return err
 }
+
+// --- Clean --
+
+func (s *Storage) GetRunsExceptLast(keep int) ([]Run, error) {
+	rows, err := s.db.Query(`
+		SELECT id, name, command, status, exit_code, git_commit, git_branch, git_dirty, workdir, stdout_path, created_at, finished_at
+		FROM runs
+		ORDER BY created_at DESC
+		LIMIT -1 OFFSET ?
+	`, keep)
+	if err != nil {
+		return nil, err
+	}
+
+	return scanRuns(rows)
+}
+
+func (s *Storage) GetRunsOlderThan(t time.Time) ([]Run, error) {
+	rows, err := s.db.Query(`
+		SELECT id, name, command, status, exit_code, git_commit, git_branch, git_dirty, workdir, stdout_path, created_at, finished_at
+		FROM runs
+		WHERE created_at < ?
+		ORDER BY created_at DESC
+	`, t)
+	if err != nil {
+		return nil, err
+	}
+
+	return scanRuns(rows)
+}
+
+// --- Helpers ---
 
 func statusFromExitCode(code int) string {
 	switch code {
