@@ -24,9 +24,23 @@ go install github.com/dmitryglhf/runar@latest
 Wrap any command with `runar`:
 
 ```bash
-runar python train.py --epochs 10
+runar --name "baseline" python train.py --epochs 10
 runar uv run train.py --lr 0.001
 runar ./scripts/experiment.sh
+```
+
+Output example:
+
+```bash
+runar echo "hello world2"
+```
+
+```bash
+[runar] ▶ run_4d848d52
+─────────────────────────────────────────
+hello world2
+─────────────────────────────────────────
+[runar] ✓ Done (exit 0) | 0s
 ```
 
 ## What gets tracked (automatically)
@@ -49,7 +63,7 @@ runar logs <id>        # show stdout/stderr
 runar                  # TUI dashboard
 ```
 
-## TUI Dashboard
+## TUI Dashboard (WIP)
 
 ```
 ┌─ Runs ───────────────────────────────────────── runar v0.1 ─┐
