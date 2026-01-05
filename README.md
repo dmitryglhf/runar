@@ -29,7 +29,9 @@ runar uv run train.py --lr 0.001
 runar ./scripts/experiment.sh
 ```
 
-Output example:
+Simple example:
+
+1. Run the command:
 
 ```bash
 runar echo "hello world2"
@@ -43,6 +45,8 @@ hello world2
 [runar] ✓ Done (exit 0) | 0s
 ```
 
+2. List runs:
+
 ```bash
 runar ls
 ```
@@ -52,12 +56,13 @@ ID            STATUS   COMMAND            DURATION
 run_4d848d52  success  echo hello world2  0s
 ```
 
+3. Show run details:
+
 ```bash
 runar show run_4d848d52
 ```
 
 ```bash
-runar show run_4d848d52
 ID:       run_4d848d52
 Command:  echo hello world2
 Status:   success
@@ -66,6 +71,16 @@ Git:      main@05ee2f7
 Workdir:  /Users/mac/dev/runar
 Exit:     0
 Logs:     .runar/logs/run_4d848d52.log
+```
+
+4. Show run logs:
+
+```bash
+runar logs run_4d848d52
+```
+
+```bash
+hello world2
 ```
 
 ## What gets tracked (automatically)
