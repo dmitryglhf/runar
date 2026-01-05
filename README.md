@@ -43,6 +43,31 @@ hello world2
 [runar] ✓ Done (exit 0) | 0s
 ```
 
+```bash
+runar ls
+```
+
+```bash
+ID            STATUS   COMMAND            DURATION
+run_4d848d52  success  echo hello world2  0s
+```
+
+```bash
+runar show run_4d848d52
+```
+
+```bash
+runar show run_4d848d52
+ID:       run_4d848d52
+Command:  echo hello world2
+Status:   success
+Duration: 0s
+Git:      main@05ee2f7
+Workdir:  /Users/mac/dev/runar
+Exit:     0
+Logs:     .runar/logs/run_4d848d52.log
+```
+
 ## What gets tracked (automatically)
 
 - Command and arguments
