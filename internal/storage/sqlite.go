@@ -17,6 +17,11 @@ type Run struct {
 	Command    string
 	Status     string
 	ExitCode   *int
+	GitCommit  *string
+	GitBranch  *string
+	GitDirty   *bool
+	Workdir    *string
+	StdoutPath *string
 	CreatedAt  time.Time
 	FinishedAt *time.Time
 }
@@ -41,9 +46,14 @@ func createSchema(db *sql.DB) error {
 		CREATE TABLE IF NOT EXISTS runs (
 			id TEXT PRIMARY KEY,
 			name TEXT,
+			command TEXT NOT NULL,
 			status TEXT DEFAULT 'running',
-			command TEXT,
 			exit_code INTEGER,
+			git_commit TEXT,
+			git_branch TEXT,
+			git_dirty BOOLEAN,
+			workdir TEXT,
+			stdout_path TEXT,
 			created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
 			finished_at DATETIME
 		)
@@ -53,7 +63,7 @@ func createSchema(db *sql.DB) error {
 
 func (s *Storage) ListRuns() ([]Run, error) {
 	rows, err := s.db.Query(`
-		SELECT id, name, command, status, exit_code, created_at, finished_at
+		SELECT id, name, command, status, exit_code, git_commit, git_branch, git_dirty, workdir, stdout_path, created_at, finished_at
 		FROM runs
 		ORDER BY created_at DESC
 	`)
@@ -71,6 +81,11 @@ func (s *Storage) ListRuns() ([]Run, error) {
 			&r.Command,
 			&r.Status,
 			&r.ExitCode,
+			&r.GitCommit,
+			&r.GitBranch,
+			&r.GitDirty,
+			&r.Workdir,
+			&r.StdoutPath,
 			&r.CreatedAt,
 			&r.FinishedAt,
 		)
@@ -105,10 +120,50 @@ func (s *Storage) DeleteRun(id string) error {
 
 func (s *Storage) CreateRun(r *Run) error {
 	_, err := s.db.Exec(`
-		INSERT INTO runs (id, name, command, status)
-		VALUES (?, ?, ?, ?)
-	`, r.ID, r.Name, r.Command, r.Status)
+		INSERT INTO runs (id, name, command, status, git_commit, git_branch, git_dirty, workdir, stdout_path)
+		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+	`,
+		r.ID,
+		r.Name,
+		r.Command,
+		r.Status,
+		r.GitCommit,
+		r.GitBranch,
+		r.GitDirty,
+		r.Workdir,
+		r.StdoutPath,
+	)
 	return err
+}
+
+func (s *Storage) GetRun(id string) (*Run, error) {
+	var r Run
+	err := s.db.QueryRow(`
+		SELECT id, name, command, status, exit_code, git_commit, git_branch, git_dirty, workdir, stdout_path, created_at, finished_at
+		FROM runs
+		WHERE id = ?
+	`, id).Scan(
+		&r.ID,
+		&r.Name,
+		&r.Command,
+		&r.Status,
+		&r.ExitCode,
+		&r.GitCommit,
+		&r.GitBranch,
+		&r.GitDirty,
+		&r.Workdir,
+		&r.StdoutPath,
+		&r.CreatedAt,
+		&r.FinishedAt,
+	)
+	if err == sql.ErrNoRows {
+		return nil, fmt.Errorf("run not found: %s", id)
+	}
+	if err != nil {
+		return nil, err
+	}
+
+	return &r, nil
 }
 
 func (s *Storage) UpdateRunFinished(id string, exitCode int) error {
@@ -135,6 +190,14 @@ func DefaultDBPath() (string, error) {
 		return "", err
 	}
 	return filepath.Join(dir, "experiments.db"), nil
+}
+
+func LogsDir() (string, error) {
+	dir := ".runar/logs"
+	if err := os.MkdirAll(dir, 0755); err != nil {
+		return "", err
+	}
+	return dir, nil
 }
 
 func GenerateRunID() string {
