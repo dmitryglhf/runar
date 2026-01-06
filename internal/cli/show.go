@@ -34,6 +34,9 @@ func runShow(cmd *cobra.Command, args []string) error {
 	}
 
 	fmt.Printf("ID:       %s\n", run.ID)
+	if run.Name != nil {
+		fmt.Printf("Name:     %s\n", *run.Name)
+	}
 	fmt.Printf("Command:  %s\n", run.Command)
 	fmt.Printf("Status:   %s\n", run.Status)
 	fmt.Printf("Started:  %s\n", run.CreatedAt.Format(time.RFC3339))
