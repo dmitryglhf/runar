@@ -42,6 +42,7 @@ func isKnownCommand(arg string) bool {
 		"logs":       true,
 		"help":       true,
 		"completion": true,
+		"clean":      true,
 	}
 	return commands[arg]
 }
