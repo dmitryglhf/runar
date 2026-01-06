@@ -95,12 +95,15 @@ hello world2
 ## Commands
 
 ```bash
-runar <command>        # run and track
-runar ls               # list runs
-runar rm <id>          # delete run
-runar show <id>        # show details
-runar logs <id>        # show stdout/stderr
-runar                  # TUI dashboard
+runar                           # TUI dashboard (WIP)
+runar <command>                 # run and track
+runar ls                        # list runs
+runar rm <id>                   # delete run
+runar show <id>                 # show details
+runar logs <id>                 # show stdout/stderr
+runar clean --keep 10           # keep the last 10
+runar clean --older 7d          # delete older than 7 days
+runar clean --keep 5 --dry-run  # see what will be deleted
 ```
 
 ## TUI Dashboard (WIP)
