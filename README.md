@@ -98,6 +98,7 @@ hello world2
 runar                           # TUI dashboard (WIP)
 runar <command>                 # run and track
 runar ls                        # list runs
+runar ls --limit 10             # list runs with limit
 runar rm <id>                   # delete run
 runar show <id>                 # show details
 runar logs <id>                 # show stdout/stderr
