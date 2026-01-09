@@ -106,26 +106,3 @@ runar clean --keep 10           # keep the last 10
 runar clean --older 7d          # delete older than 7 days
 runar clean --keep 5 --dry-run  # see what will be deleted
 ```
-
-## TUI Dashboard (WIP)
-
-```
-┌─ Runs ───────────────────────────────────────── runar v0.1 ─┐
-│                                                             │
-├─────┬──────────────────┬────────┬──────────────┬────────────┤
-│  #  │ Name             │ Status │ Command      │ Duration   │
-├─────┼──────────────────┼────────┼──────────────┼────────────┤
-│ ► 1 │ baseline         │ ✓ done │ python tr... │ 2h 15m     │
-│   2 │ run_p3n8v2       │ ✓ done │ uv run tr... │ 1h 23m     │
-│   3 │ run_abc123       │ ✗ fail │ ./train.sh   │ 0h 05m     │
-├─────┴──────────────────┴────────┴──────────────┴────────────┤
-│ ⏎ details   d delete   / search   q quit   ? help           │
-└─────────────────────────────────────────────────────────────┘
-```
-
-## Roadmap
-
-- Interactive TUI
-- Scripts orchestration
-- Python-SDK
-- Package manager installation
