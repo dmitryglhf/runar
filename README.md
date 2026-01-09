@@ -66,6 +66,18 @@ Exit:     0
 Logs:     .runar/logs/run_4d848d52.log
 ```
 
+View logs:
+
+```bash
+runar logs run_4d848d52
+```
+
+```
+Training started...
+Epoch 1/10: loss=0.89
+...
+```
+
 ## Use cases
 
 - **ML experiments** — track training runs with hyperparameters and git state
