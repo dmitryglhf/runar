@@ -8,87 +8,79 @@
 
 </div>
 
-## Overview
+## Why
 
-Runar is a zero-config CLI tool that tracks your script executions. Wrap any command with `runar` to automatically log runtime, exit status, git state, and stdout with persistent storage.
+Ever ran a script and forgot the exact command or parameters that worked? Runar automatically tracks every execution with full context — so you can always find what you ran, when, and what happened.
 
 ## Installation
 
 ```bash
-# from source
 go install github.com/dmitryglhf/runar/cmd/runar@latest
 ```
 
-## Usage
+## Quick start
 
-Wrap any command with `runar`:
+Run any command with `runar`:
 
 ```bash
-runar --name "baseline" python train.py --epochs 10
-runar uv run train.py --lr 0.001
-runar ./scripts/experiment.sh
+runar python train.py --epochs 10
 ```
 
-Simple example:
-
-1. Run the command:
-
-```bash
-runar echo "hello world2"
 ```
-
-```bash
 [runar] ▶ run_4d848d52
 ─────────────────────────────────────────
-hello world2
+Training started...
+Epoch 1/10: loss=0.89
+...
 ─────────────────────────────────────────
-[runar] ✓ Done (exit 0) | 0s
+[runar] ✓ Done (exit 0) | 2m 34s
 ```
 
-2. List runs:
+List your runs:
 
 ```bash
 runar ls
 ```
 
-```bash
-ID            STATUS   COMMAND            DURATION
-run_4d848d52  success  echo hello world2  0s
+```
+ID            STATUS   COMMAND                       DURATION
+run_4d848d52  success  python train.py --epochs 10   2m 34s
+run_a1b2c3d4  failure  python train.py --epochs 50   12m 05s
+run_f7e8d9c0  success  ./scripts/preprocess.sh       45s
 ```
 
-3. Show run details:
+Show run details:
 
 ```bash
 runar show run_4d848d52
 ```
 
-```bash
+```
 ID:       run_4d848d52
-Command:  echo hello world2
+Command:  python train.py --epochs 10
 Status:   success
-Duration: 0s
-Git:      main@05ee2f7
-Workdir:  /Users/mac/dev/runar
+Duration: 2m 34s
+Git:      main@a1b2c3d
+Workdir:  /home/user/project
 Exit:     0
 Logs:     .runar/logs/run_4d848d52.log
 ```
 
-4. Show run logs:
+## Use cases
 
-```bash
-runar logs run_4d848d52
-```
+- **ML experiments** — track training runs with hyperparameters and git state
+- **Build scripts** — log builds to debug what changed when things break
+- **Data pipelines** — keep history of ETL jobs and their outputs
+- **Any long-running command** — never lose track of what you ran
 
-```bash
-hello world2
-```
+## What gets tracked
 
-## What gets tracked (automatically)
+Automatically captured for every run:
 
 - Command and arguments
 - Start/end time, duration
-- Exit code
-- stdout/stderr (saved)
+- Exit code and status
+- stdout/stderr (saved to file)
 - Git commit, branch, dirty state
 - Working directory
 
@@ -96,12 +88,39 @@ hello world2
 
 ```bash
 runar <command>                 # run and track
-runar ls                        # list runs
-runar ls --limit 10             # list runs with limit
-runar rm <id>                   # delete run
-runar show <id>                 # show details
+runar run <command>             # explicit run (same as above)
+runar --name "experiment" <cmd> # run with custom name
+
+runar ls                        # list all runs
+runar ls --limit 10             # list last 10 runs
+
+runar show <id>                 # show run details
 runar logs <id>                 # show stdout/stderr
-runar clean --keep 10           # keep the last 10
-runar clean --older 7d          # delete older than 7 days
-runar clean --keep 5 --dry-run  # see what will be deleted
+
+runar rm <id>                   # delete a run
+runar clean --keep 10           # keep only last 10 runs
+runar clean --older 7d          # delete runs older than 7 days
+runar clean --keep 5 --dry-run  # preview what would be deleted
 ```
+
+## Storage
+
+All data is stored locally in `.runar/` directory:
+
+```
+.runar/
+├── experiments.db    # SQLite database with run metadata
+└── logs/             # stdout/stderr for each run
+    ├── run_4d848d52.log
+    └── ...
+```
+
+Add to `.gitignore`:
+
+```
+.runar/
+```
+
+## License
+
+MIT
