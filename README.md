@@ -95,7 +95,6 @@ hello world2
 ## Commands
 
 ```bash
-runar                           # TUI dashboard (WIP)
 runar <command>                 # run and track
 runar ls                        # list runs
 runar ls --limit 10             # list runs with limit
